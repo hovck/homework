@@ -29,7 +29,7 @@ int main() {
 
 ## 效能分析
 
-1. 時間複雜度：程式的時間複雜度為 $O()$。
+1. 時間複雜度：程式的時間複雜度為 $O()$ (m決定複雜度的大小)。
 2. 空間複雜度：空間複雜度為 $O(m+n)$。
 
 ## 測試與驗證
@@ -46,10 +46,8 @@ int main() {
 
 ### 編譯與執行指令
 ```shell
-3 13
-
------------------
-Process exited after 7.53 seconds with return value 3221225725
+- C++ Compiler: C:\Program Files (x86)\Dev-Cpp\MinGW64\bin\g++.exe
+- Command: g++.exe "D:\學校\c++\資料結構用\ackermann.cpp" -o "D:\學校\c++\資料結構用\ackermann.exe" -std=c++11 -I"C:\Program Files (x86)\Dev-Cpp\MinGW64\include" -I"C:\Program Files (x86)\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"C:\Program Files (x86)\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"C:\Program Files (x86)\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\c++" -L"C:\Program Files (x86)\Dev-Cpp\MinGW64\lib" -L"C:\Program Files (x86)\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib" -static-libgcc
 ```
 ### 結論
 
