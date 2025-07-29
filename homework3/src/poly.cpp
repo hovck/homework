@@ -1,7 +1,9 @@
 #include <iostream>
 #include <math.h>
 using namespace std;
+
 class poly;
+
 class term {
     friend class poly;
     friend ostream& operator<<(ostream& os, const poly& p);
@@ -21,9 +23,7 @@ public:
     poly& operator=(const poly& other);
     ~poly();
     poly add(const poly& b) const;
-    poly sub(const poly& b) const;
-    poly mul(const poly& b) const;
-    poly div(const poly& b) const;
+    poly multiply(const poly& b) const;
     float eval(float f);
     void newterm(float coef, int exp);
     void read_terms(int num_terms);
@@ -64,6 +64,7 @@ poly::~poly() {
 }
 
 void poly::newterm(float coef, int exp) {
+    if (coef == 0) return;
     if (terms == capacity) {
         capacity *= 2;
         term *temp = new term[capacity];
@@ -73,8 +74,25 @@ void poly::newterm(float coef, int exp) {
         delete[] termarray;
         termarray = temp;
     }
-    termarray[terms].coef = coef;
-    termarray[terms].exp = exp;
+    int i = 0;
+    while (i < terms && termarray[i].exp > exp) {
+        i++;
+    }
+    if (i < terms && termarray[i].exp == exp) {
+        termarray[i].coef += coef;
+        if (termarray[i].coef == 0) {
+            for (int j = i; j < terms - 1; j++) {
+                termarray[j] = termarray[j + 1];
+            }
+            terms--;
+        }
+        return;
+    }
+    for (int j = terms; j > i; j--) {
+        termarray[j] = termarray[j - 1];
+    }
+    termarray[i].coef = coef;
+    termarray[i].exp = exp;
     terms++;
 }
 
@@ -118,37 +136,7 @@ poly poly::add(const poly& b) const {
     return result;
 }
 
-poly poly::sub(const poly& b) const {
-    poly result;
-    int i = 0, j = 0;
-    while (i < terms && j < b.terms) {
-        if (termarray[i].exp > b.termarray[j].exp) {
-            result.newterm(termarray[i].coef, termarray[i].exp);
-            i++;
-        } else if (termarray[i].exp < b.termarray[j].exp) {
-            result.newterm(-b.termarray[j].coef, b.termarray[j].exp);
-            j++;
-        } else {
-            float newcoef = termarray[i].coef - b.termarray[j].coef;
-            if (newcoef != 0) {
-                result.newterm(newcoef, termarray[i].exp);
-            }
-            i++;
-            j++;
-        }
-    }
-    while (i < terms) {
-        result.newterm(termarray[i].coef, termarray[i].exp);
-        i++;
-    }
-    while (j < b.terms) {
-        result.newterm(-b.termarray[j].coef, b.termarray[j].exp);
-        j++;
-    }
-    return result;
-}
-
-poly poly::mul(const poly& b) const {
+poly poly::multiply(const poly& b) const {
     poly result;
     const int max_terms = terms * b.terms;
     term* temp = new term[max_terms];
@@ -189,37 +177,6 @@ poly poly::mul(const poly& b) const {
 
     delete[] temp;
     return result;
-}
-
-poly poly::div(const poly& b) const {
-    poly quotient;
-    if (b.terms == 0 || b.termarray[0].coef == 0) {
-        return quotient;
-    }
-    poly dividend = *this;
-    if (dividend.terms == 0) {
-        return quotient;
-    }
-    while (dividend.terms > 0 && dividend.termarray[0].exp >= b.termarray[0].exp) {
-        float newcoef = dividend.termarray[0].coef / b.termarray[0].coef;
-        int newexp = dividend.termarray[0].exp - b.termarray[0].exp;
-        poly temp;
-        temp.newterm(newcoef, newexp);
-        quotient = quotient.add(temp);
-        poly subtractor;
-        for (int i = 0; i < b.terms; i++) {
-            subtractor.newterm(b.termarray[i].coef * newcoef, b.termarray[i].exp + newexp);
-        }
-        dividend = dividend.sub(subtractor);
-        poly cleaned_dividend;
-        for (int i = 0; i < dividend.terms; i++) {
-            if (dividend.termarray[i].coef != 0 && dividend.termarray[i].exp >= 0) {
-                cleaned_dividend.newterm(dividend.termarray[i].coef, dividend.termarray[i].exp);
-            }
-        }
-        dividend = cleaned_dividend;
-    }
-    return quotient;
 }
 
 float poly::eval(float f) {
@@ -269,9 +226,7 @@ int main() {
         b.read_terms(n);
         cout << endl;
         cout << a.add(b) << endl;
-        cout << a.mul(b) << endl;
-        cout << a.sub(b) << endl;
-        cout << a.div(b) << endl;
+        cout << a.multiply(b) << endl;
         cout << endl;
     }
     return 0;
