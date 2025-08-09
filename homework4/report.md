@@ -366,14 +366,24 @@ istream& operator>>(istream& is, poly& p) {
 
 | 測試案例 | 輸入參數 a m n | 預期輸出 | 實際輸出 |
 |----------|--------------|-----------|---------|
+| 測試一   | $1 3 3 5 5 4 4 3 3 2 1 6 5 3 2$ 等同於( $A:5x^5+4x^4+3x^3  B:2x^1+6x^5+3x^2$ ) | 加法 : $11x^5+4x^4+3x^3+3x^2+2x$| $11x^5+4x^4+3x^3+3x^2+2x$ |
+| 測試一   | $1 3 3 5 5 4 4 3 3 2 1 6 5 3 2$ 等同於( $A:5x^5+4x^4+3x^3  B:2x^1+6x^5+3x^2$ ) | 乘法 : $30x^10+24x^9+18x^8+15x^7+22x^6+17x^5+6x^4$ | $30x^10+24x^9+18x^8+15x^7+22x^6+17x^5+6x^4$ |
+| 測試一   | $1 3 3 5 5 4 4 3 3 2 1 6 5 3 2$ 等同於( $A:5x^5+4x^4+3x^3  B:2x^1+6x^5+3x^2$ ) | 減法 : $-1x^5+4x^4+3x^3-3x^2-2x$ | $-1x^5+4x^4+3x^3-3x^2-2x$ |
+| 測試一   | $1 3 3 5 5 4 4 3 3 2 1 6 5 3 2$ 等同於( $A:5x^5+4x^4+3x^3  B:2x^1+6x^5+3x^2$ ) | 除法 : $5/6$| $0.83333$ |
 
 ### 編譯與執行指令
 ```shell
+- C++ Compiler: C:\Program Files (x86)\Dev-Cpp\MinGW64\bin\g++.exe
+- Command: g++.exe "D:\學校\c++\資料結構用\linkpoly.cpp" -o "D:\學校\c++\資料結構用\linkpoly.exe" -std=c++11 -I"C:\Program Files (x86)\Dev-Cpp\MinGW64\include" -I"C:\Program Files (x86)\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"C:\Program Files (x86)\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"C:\Program Files (x86)\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\c++" -L"C:\Program Files (x86)\Dev-Cpp\MinGW64\lib" -L"C:\Program Files (x86)\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib" -static-libgcc
 ```
 ### 結論
 
+1.在除法出現其實出現不了的東西時(多項式後項比前項大(如: $5x^5/6x^6$ ))會出現的結果實際上只包含部分內容。
+
+2.其餘部分計算都為正確
+
 ## 申論及開發報告
 
-### 使用稀疏矩陣原因
+### 使用連結串列原因
 
 因為有實作的要求
